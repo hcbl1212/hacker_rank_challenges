@@ -5,21 +5,26 @@ require 'stringio'
 
 # Complete the minimumSwaps function below.
 def minimumSwaps(arr)
-    # stash length
+    # You are given an unordered array consisting of consecutive integers  [1, 2, 3, ..., n] without any duplicates, get min swaps
+    # logic here is to convert the array to a graph
+    # where each node is structured as such
+    # if the original array is this [1, 3, 5, 2, 4, 6, 8]
+    # then the graph is  [{1=>0}, {2=>3}, {3=>1}, {4=>4}, {5=>2}, {6=>5}, {8=>6}]
+    # What we are trying to do is sum up the cycles 
+    # (non intersecting because of the nature of the data)
+    # we visit each node and then count each visit which will actually
+    # tell us the minimum amount of swaps!
     length = arr.length
-    # this is an array
     array_position = []
     visited_array = []
     answer = 0
     arr.each_with_index do |val, index|
+        # creating the graph node
         array_position << Hash[val, index] 
         visited_array << false
     end
     # sort this by the original values to get the position in the new array
     array_position.sort! { |node, node2| node.keys.first <=> node2.keys.first }
-    # node i to node j if the element at i’th index must be present at j’th index in the sorted array.
-    # [4, 3, 1, 2]
-    # [{1=>2}, {2=>3}, {3=>1}, {4=>0}]
     (0...length).each do |index|
         # if already visited OR the this is already in the position
         # this works because we sorted the array
